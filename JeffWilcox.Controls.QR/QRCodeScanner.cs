@@ -20,10 +20,11 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using com.google.zxing;
-using com.google.zxing.common;
-using com.google.zxing.qrcode;
+using System.Windows.Threading;
 using Microsoft.Devices;
+using ZXing;
+using ZXing.Common;
+using ZXing.QrCode;
 
 namespace JeffWilcox.Controls
 {
@@ -34,7 +35,7 @@ namespace JeffWilcox.Controls
     [TemplatePart(Name = VideoBrushName, Type = typeof(VideoBrush))]
     public class QRCodeScanner : Control
     {
-        private static readonly Dictionary<object, object> QRCodeHint = new Dictionary<object, object>
+        private static readonly Dictionary<DecodeHintType, object> QRCodeHint = new Dictionary<DecodeHintType, object>
         {
             { DecodeHintType.POSSIBLE_FORMATS, BarcodeFormat.QR_CODE }
         };
@@ -48,6 +49,8 @@ namespace JeffWilcox.Controls
         private PhotoCamera _photoCamera;
 
         private PhotoCameraLuminanceSource _luminanceSource;
+
+        private DispatcherTimer timer;
 
         private bool _initialized;
 
@@ -127,6 +130,7 @@ namespace JeffWilcox.Controls
             {
                 if (_videoBrush != null)
                 {
+                    _photoCamera.FlashMode = FlashMode.Off;
                     Dispatcher.BeginInvoke(InitializeVideoBrush);
                 }
             }
@@ -168,8 +172,19 @@ namespace JeffWilcox.Controls
             {
                 _reader = new QRCodeReader();
                 IsScanning = true;
-                Scan();
+                if (timer == null)
+                {
+                    timer = new DispatcherTimer();
+                    timer.Interval = TimeSpan.FromMilliseconds(100);
+                    timer.Tick += timer_Tick;
+                }
+                timer.Start();
             }
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            Scan();
         }
 
         public void StopScanning()
@@ -178,6 +193,11 @@ namespace JeffWilcox.Controls
             {
                 IsScanning = false;
                 _reader = null;
+            }
+
+            if (timer != null)
+            {
+                timer.Stop();
             }
         }
 
@@ -201,25 +221,27 @@ namespace JeffWilcox.Controls
                 {
                     // 2-2-2012 - Rowdy.nl
                     // Focus the camera for better recognition of QR code's
+
                     if (_photoCamera.IsFocusSupported)
                     {
                         _photoCamera.Focus();
                     }
                     // End Rowdy.nl
-                    
+
                     _photoCamera.GetPreviewBufferY(_luminanceSource.PreviewBufferY);
                     var binarizer = new HybridBinarizer(_luminanceSource);
                     var binaryBitmap = new BinaryBitmap(binarizer);
                     var result = _reader.decode(binaryBitmap, QRCodeHint);
 
-                    StopScanning();
-                    OnResult(result);
+                    if (result != null)
+                    {
+                        StopScanning();
+                        OnResult(result);
+                    }
                 }
                 catch (ReaderException)
                 {
-                    // There was not a successful QR code read in the scan 
-                    // pass. Invoke and try again soon.
-                    Dispatcher.BeginInvoke(Scan);
+                  
                 }
                 catch (Exception ex)
                 {

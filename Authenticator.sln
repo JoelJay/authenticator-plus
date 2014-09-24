@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authenticator", "Authenticator.csproj", "{C30FEE87-C49D-4D4A-83BA-AC0698045A4A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeffWilcox.Controls.QR", "JeffWilcox.Controls.QR\JeffWilcox.Controls.QR.csproj", "{F47A8668-B209-4215-936C-5EDFED289F26}"

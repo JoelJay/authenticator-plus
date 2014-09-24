@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
-  <App xmlns="" ProductID="{2d1aac7b-fca5-407b-8de9-276d9d7c3325}" Title="Authenticator+" RuntimeType="Silverlight" Version="1.6.1.1" Genre="apps.normal" Author="Dima Stebaev" Description="Authenticator for Windows Phone" Publisher="Stebaev">
-    <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
+<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
+  <DefaultLanguage xmlns="" code="" />
+  <App xmlns="" ProductID="{2d1aac7b-fca5-407b-8de9-276d9d7c3325}" Title="Authenticator+" RuntimeType="Silverlight" Version="1.6.1.1" Genre="apps.normal" Author="Dima Stebaev" Description="Authenticator for Windows Phone" Publisher="Stebaev" PublisherID="{e4682eda-5980-4851-94e0-a13fbb158c0e}">
+    <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_IDENTITY_DEVICE" />
       <Capability Name="ID_CAP_IDENTITY_USER" />
@@ -13,12 +14,27 @@
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="AuthenticatorToken" TaskName="_default">
-        <TemplateType5>
-          <BackgroundImageURI IsRelative="true" IsResource="false">Background.png</BackgroundImageURI>
+        <TemplateFlip>
+          <SmallImageURI IsResource="false" IsRelative="true">Assets\Small.png</SmallImageURI>
           <Count>0</Count>
+          <BackgroundImageURI IsResource="false" IsRelative="true">Assets\Large.png</BackgroundImageURI>
           <Title>Authenticator+</Title>
-        </TemplateType5>
+          <BackContent>
+          </BackContent>
+          <BackBackgroundImageURI>
+          </BackBackgroundImageURI>
+          <BackTitle>
+          </BackTitle>
+          <DeviceLockImageURI>
+          </DeviceLockImageURI>
+          <HasLarge>false</HasLarge>
+        </TemplateFlip>
       </PrimaryToken>
     </Tokens>
+    <ScreenResolutions>
+      <ScreenResolution Name="ID_RESOLUTION_WVGA" />
+      <ScreenResolution Name="ID_RESOLUTION_WXGA" />
+      <ScreenResolution Name="ID_RESOLUTION_HD720P" />
+    </ScreenResolutions>
   </App>
 </Deployment>

@@ -10,8 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
-using WP7_Barcode_Library;
 using Microsoft.Phone.Shell;
+using ZXing;
 
 namespace Authenticator
 {
@@ -63,13 +63,10 @@ namespace Authenticator
             if ((App.Current as App).QRCode != null)
             {
                 //QR code has been received                
-
-                BarcodeCaptureResult scan_e = new BarcodeCaptureResult();
-                scan_e.State = WP7_Barcode_Library.CaptureState.Success;
-                scan_e.BarcodeText = (App.Current as App).QRCode;
+                string bar_code  = (App.Current as App).QRCode;
                 (App.Current as App).QRCode = null;
 
-                ScanBarcode_Completed(scan_e);
+                ScanBarcode_Completed(bar_code);
             }
 
             base.OnNavigatedTo(e);
@@ -108,19 +105,20 @@ namespace Authenticator
             NavigationService.Navigate(new Uri("/QRPage.xaml", UriKind.Relative));            
         }
 
-        public void ScanBarcode_Completed(BarcodeCaptureResult e)
+        public void ScanBarcode_Completed(string code)
         {
-            if (e.State == WP7_Barcode_Library.CaptureState.Success)
+            // sample url code = "otpauth://totp/LastPass%3Awpxap%40hotmail.com?secret=66LGUTFXY7MKFSU3&issuer=LastPass";
+            if (string.IsNullOrEmpty(code) == false)
             {
-                string str = e.BarcodeText;
                 try
                 {
-                    str = str.Replace("otpauth://totp/", "");
-                    string[] splitString = str.Split(Convert.ToChar("?"));
-                    splitString[1] = splitString[1].Replace("secret=", "");
-
+                    code = HttpUtility.UrlDecode(code);
+                    code = code.Replace("otpauth://totp/", "");
+                    string[] splitString = code.Split(Convert.ToChar("?"));
+                    string[] keyArray = splitString[1].Split(new[] { '=', '&' });
+                    string key = keyArray[1];
                     txtAccountName.Text = splitString[0];
-                    txtSecretKey.Text = splitString[1];
+                    txtSecretKey.Text = key;
 
                     return;
                 }

@@ -33,11 +33,10 @@
         <jwqr:QRCodeScanner
             x:Name="barcodeScanner"
             Grid.Row="1"
-            Width="480"
-            Height="480"
+            Width="400"
+            Height="400"
             ScanComplete="QRCodeScanner_ScanComplete"
-            Error="QRCodeScanner_Error"
-        />
+            Error="QRCodeScanner_Error"/>
             
     </Grid>
 

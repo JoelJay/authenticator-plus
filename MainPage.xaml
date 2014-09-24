@@ -28,12 +28,13 @@
             <TextBlock x:Name="PageTitle" Text="accounts" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
-        <toolkit:MultiselectList x:Name="lstAccounts" Grid.Row="1" SelectionChanged="lstAccounts_SelectionChanged" IsSelectionEnabledChanged="lstAccounts_IsSelectionEnabledChanged">
-            <toolkit:MultiselectList.ItemTemplate>
+        <toolkit:LongListMultiSelector  x:Name="lstAccounts" Grid.Row="1" SelectionChanged="lstAccounts_SelectionChanged" 
+                                        IsSelectionEnabledChanged="lstAccounts_IsSelectionEnabledChanged" LayoutMode="List" IsGroupingEnabled="False">
+            <toolkit:LongListMultiSelector.ItemTemplate>
                 <DataTemplate>
                     <StackPanel x:Name="LayoutRoot" Background="Transparent" Margin="-12,0,0,0" Tap="ItemContent_Tap">
-                        <TextBlock Text="{Binding Path=AccountName}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <TextBlock Text="{Binding Path=Code}" Margin="12,-6,12,24" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" />
+                        <TextBlock Text="{Binding AccountName}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <TextBlock Text="{Binding Code}" Margin="12,-6,12,24" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" />
 
                         <toolkit:ContextMenuService.ContextMenu>
                             <toolkit:ContextMenu>
@@ -43,8 +44,8 @@
                         </toolkit:ContextMenuService.ContextMenu>
                     </StackPanel>
                 </DataTemplate>
-            </toolkit:MultiselectList.ItemTemplate>
-        </toolkit:MultiselectList>
+            </toolkit:LongListMultiSelector.ItemTemplate>
+        </toolkit:LongListMultiSelector>
 
         <TextBlock x:Name="txtEmpty" Grid.Row="1" Margin="24,0,0,0" Text="You haven't set up any of your accounts yet." TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}" Foreground="{StaticResource PhoneAccentBrush}" />
     </Grid>

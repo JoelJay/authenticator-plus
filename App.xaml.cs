@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,7 +24,7 @@ namespace Authenticator
 {
     public partial class App : Application
     {
-        public AccountList Database { get; set; }
+        public ObservableCollection<Account> Database { get; set; }
         public bool DataCorruptionException { get; set; }
         
         public PhoneApplicationFrame RootFrame { get; private set; }
@@ -59,7 +61,7 @@ namespace Authenticator
 
             InitializePhoneApplication();            
 
-            this.Database = new AccountList();
+            this.Database = new ObservableCollection<Account>();
             StreamReader sr = null;
 
             try
@@ -67,10 +69,10 @@ namespace Authenticator
                 IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
                 if (iso.FileExists("AccountArchive.xml"))
                 {
-                    XmlSerializer xs = new XmlSerializer(typeof(AccountList));
+                    XmlSerializer xs = new XmlSerializer(typeof(ObservableCollection<Account>));
                     using (sr = new StreamReader(iso.OpenFile("AccountArchive.xml", FileMode.Open)))
                     {
-                        this.Database = (AccountList)xs.Deserialize(sr);
+                        this.Database = (ObservableCollection<Account>)xs.Deserialize(sr);
                     }
                 }
             }
@@ -137,7 +139,7 @@ namespace Authenticator
         {
             using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                var xs = new XmlSerializer(typeof(AccountList));
+                var xs = new XmlSerializer(typeof(ObservableCollection<Account>));
                 var stream = iso.OpenFile("AccountArchive.xml", FileMode.Create);
                 using (var sw = new StreamWriter(stream))
                 {

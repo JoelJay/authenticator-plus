@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Windows;
@@ -29,7 +30,7 @@ namespace Authenticator
         ApplicationBarIconButton select;
         ApplicationBarIconButton delete;
 
-        ApplicationBarMenuItem about;        
+        ApplicationBarMenuItem about;
         ApplicationBarMenuItem settings;
 
         public MainPage()
@@ -64,7 +65,7 @@ namespace Authenticator
 
             about = new ApplicationBarMenuItem();
             about.Text = "about authenticator+";
-            about.Click += mnuAbout_Click;            
+            about.Click += mnuAbout_Click;
 
             settings = new ApplicationBarMenuItem();
             settings.Text = "settings";
@@ -176,7 +177,7 @@ namespace Authenticator
 
         private void lstAccounts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MultiselectList target = (MultiselectList)sender;
+            var target = sender as LongListMultiSelector;
             ApplicationBarIconButton i = (ApplicationBarIconButton)ApplicationBar.Buttons[0];
 
             if (target.IsSelectionEnabled)
@@ -219,22 +220,22 @@ namespace Authenticator
                 ApplicationBar.Buttons.Add(add);
                 ApplicationBar.Buttons.Add(select);
 
-                ApplicationBar.MenuItems.Add(about);                
+                ApplicationBar.MenuItems.Add(about);
                 ApplicationBar.MenuItems.Add(settings);
             }
         }
 
         private void ItemContent_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            Account item = ((FrameworkElement)sender).DataContext as Account;
-            if (this.lstAccounts.IsSelectionEnabled)
-            {
-                MultiselectItem container = this.lstAccounts.ItemContainerGenerator.ContainerFromItem(item) as MultiselectItem;
-                if (container != null)
-                {
-                    container.IsSelected = !container.IsSelected;
-                }
-            }
+            //Account item = ((FrameworkElement)sender).DataContext as Account;
+            //if (this.lstAccounts.IsSelectionEnabled)
+            //{
+            //    MultiselectItem container = this.lstAccounts.ItemContainerGenerator.ContainerFromItem(item) as MultiselectItem;
+            //    if (container != null)
+            //    {
+            //        container.IsSelected = !container.IsSelected;
+            //    }
+            //}
         }
 
         private Account MostRecentAccountClick
@@ -271,7 +272,7 @@ namespace Authenticator
                 if (MessageBox.Show("Are you sure you want to delete the selected account?", "Delete", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
                     _application.Database.Remove(MostRecentAccountClick);
-                    
+
                     _application.Application_Closing(null, null);
                 }
             }
@@ -288,7 +289,7 @@ namespace Authenticator
             myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             myDispatcherTimer.Tick += new EventHandler(Timer_Tick);
             myDispatcherTimer.Start();
-        }        
+        }
 
         private void Timer_Tick(object o, EventArgs sender)
         {
